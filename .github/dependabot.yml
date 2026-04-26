@@ -1,0 +1,8 @@
+version: 2
+updates:
+  # Keep the SHA-pinned actions in .github/workflows/*.yml fresh.
+  # Dependabot opens a PR per stale action with the updated SHA + tag comment.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

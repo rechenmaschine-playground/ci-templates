@@ -1,0 +1,51 @@
+# ci-templates
+
+Shared GitHub Actions reusable workflows for the org. Consumed via
+`uses: <org>/ci-templates/.github/workflows/<name>.yml@<sha>`.
+
+## Workflows
+
+### `secrets-scan.yml`
+
+Scans the consuming repo's full git history with
+[gitleaks](https://github.com/gitleaks/gitleaks) and uploads SARIF
+findings to the GitHub Code Scanning Security tab.
+
+**Consumer-side usage:**
+
+```yaml
+# In <repo>/.github/workflows/check.yml (or similar)
+jobs:
+  secrets-scan:
+    uses: <org>/ci-templates/.github/workflows/secrets-scan.yml@<sha>
+    secrets: inherit
+```
+
+To use a self-hosted runner instead of `ubuntu-latest`:
+
+```yaml
+  secrets-scan:
+    uses: <org>/ci-templates/.github/workflows/secrets-scan.yml@<sha>
+    with:
+      runs-on: self-hosted
+    secrets: inherit
+```
+
+**Pre-requisites:**
+
+- Org-level secret `GITLEAKS_LICENSE` (free for orgs — register at
+  <https://gitleaks.io>, add as Organization Secret with access scoped
+  to the repos that should consume this workflow).
+
+**Behavior:**
+
+- Default runner: `ubuntu-latest`. Override via `with: runs-on: ...`.
+- Fetches the consumer repo with `fetch-depth: 0` (full history).
+- Does **not** fetch submodules — each repo scans itself by org policy.
+- Gitleaks default config; suppress known-OK historical hits via a
+  `.gitleaksignore` file in the consumer repo.
+
+## Versioning
+
+Tag releases as `vMAJOR.MINOR.PATCH`. Consumers SHA-pin (with a
+`# vX.Y.Z` comment) and bump via Dependabot.
