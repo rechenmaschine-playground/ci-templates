@@ -14,7 +14,15 @@ findings to the GitHub Code Scanning Security tab.
 **Consumer-side usage:**
 
 ```yaml
-# In <repo>/.github/workflows/check.yml (or similar)
+name: check
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Daily full-history scan as a safety net for pre-existing leaks
+    # and for new gitleaks rules that catch previously-missed patterns.
+    - cron: '0 8 * * *'
 
 permissions:
   contents: read
