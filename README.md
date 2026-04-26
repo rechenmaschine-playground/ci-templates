@@ -15,6 +15,13 @@ findings to the GitHub Code Scanning Security tab.
 
 ```yaml
 # In <repo>/.github/workflows/check.yml (or similar)
+
+permissions:
+  contents: read
+  # Required so the called workflow can upload SARIF to Code Scanning.
+  # GitHub will fail the run at startup if this isn't granted on the caller.
+  security-events: write
+
 jobs:
   secrets-scan:
     uses: <org>/ci-templates/.github/workflows/secrets-scan.yml@<sha>
