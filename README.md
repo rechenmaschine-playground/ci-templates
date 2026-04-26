@@ -13,8 +13,10 @@ findings to the GitHub Code Scanning Security tab.
 
 **Consumer-side usage:**
 
+Each consuming repo adds a `.github/workflows/secrets-scan.yml`:
+
 ```yaml
-name: check
+name: secrets-scan
 on:
   push:
     branches: [main]
