@@ -18,15 +18,17 @@ findings to the GitHub Code Scanning Security tab.
 
 permissions:
   contents: read
-  # Required so the called workflow can upload SARIF to Code Scanning.
-  # GitHub will fail the run at startup if this isn't granted on the caller.
-  security-events: write
+  pull-requests: write    # gitleaks PR comments
+  security-events: write  # SARIF → Code Scanning Security tab
 
 jobs:
   secrets-scan:
     uses: <org>/ci-templates/.github/workflows/secrets-scan.yml@<sha>
     secrets: inherit
 ```
+
+The caller must grant the same permissions the called workflow needs;
+GitHub fails the run at startup if any are missing.
 
 To use a self-hosted runner instead of `ubuntu-latest`:
 
